@@ -575,7 +575,7 @@ void AtlasEngine::_recreateFontDependentResources()
             memcpy(&localeName[0], L"en-US", 12);
         }
 
-        _api.userLocaleName = std::wstring{ &localeName[0] };
+        _p.userLocaleName = std::wstring{ &localeName[0] };
     }
 
     if (_p.s->font->fontAxisValues.empty())
@@ -752,7 +752,7 @@ void AtlasEngine::_flushBufferLine()
 
 void AtlasEngine::_mapCharacters(const wchar_t* text, const u32 textLength, u32* mappedLength, IDWriteFontFace2** mappedFontFace) const
 {
-    TextAnalysisSource analysisSource{ _api.userLocaleName.c_str(), text, textLength };
+    TextAnalysisSource analysisSource{ _p.userLocaleName.c_str(), text, textLength };
     const auto& textFormatAxis = _api.textFormatAxes[static_cast<size_t>(_api.attributes)];
 
     // We don't read from scale anyways.
@@ -807,7 +807,7 @@ void AtlasEngine::_mapComplex(IDWriteFontFace2* mappedFontFace, u32 idx, u32 len
 {
     _api.analysisResults.clear();
 
-    TextAnalysisSource analysisSource{ _api.userLocaleName.c_str(), _api.bufferLine.data(), gsl::narrow<UINT32>(_api.bufferLine.size()) };
+    TextAnalysisSource analysisSource{ _p.userLocaleName.c_str(), _api.bufferLine.data(), gsl::narrow<UINT32>(_api.bufferLine.size()) };
     TextAnalysisSink analysisSink{ _api.analysisResults };
     THROW_IF_FAILED(_p.textAnalyzer->AnalyzeScript(&analysisSource, idx, length, &analysisSink));
 
@@ -852,7 +852,7 @@ void AtlasEngine::_mapComplex(IDWriteFontFace2* mappedFontFace, u32 idx, u32 len
                 /* isSideways          */ false,
                 /* isRightToLeft       */ 0,
                 /* scriptAnalysis      */ &a.analysis,
-                /* localeName          */ _api.userLocaleName.c_str(),
+                /* localeName          */ _p.userLocaleName.c_str(),
                 /* numberSubstitution  */ nullptr,
                 /* features            */ &features,
                 /* featureRangeLengths */ &featureRangeLengths,
@@ -904,7 +904,7 @@ void AtlasEngine::_mapComplex(IDWriteFontFace2* mappedFontFace, u32 idx, u32 len
             /* isSideways          */ false,
             /* isRightToLeft       */ 0,
             /* scriptAnalysis      */ &a.analysis,
-            /* localeName          */ _api.userLocaleName.c_str(),
+            /* localeName          */ _p.userLocaleName.c_str(),
             /* features            */ &features,
             /* featureRangeLengths */ &featureRangeLengths,
             /* featureRanges       */ featureRanges,

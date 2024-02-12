@@ -295,8 +295,8 @@ CATCH_RETURN()
         /* fontStyle      */ DWRITE_FONT_STYLE_NORMAL,
         /* fontStretch    */ DWRITE_FONT_STRETCH_NORMAL,
         /* fontSize       */ _api.s->font->fontSize,
-        /* localeName     */ L"",
-        /* textFormat     */ textFormat.put()));
+        /* localeName     */ _p.userLocaleName.c_str(),
+        /* textFormat     */ textFormat.addressof()));
 
     wil::com_ptr<IDWriteTextLayout> textLayout;
     RETURN_IF_FAILED(_p.dwriteFactory->CreateTextLayout(glyph.data(), gsl::narrow_cast<uint32_t>(glyph.size()), textFormat.get(), FLT_MAX, FLT_MAX, textLayout.addressof()));

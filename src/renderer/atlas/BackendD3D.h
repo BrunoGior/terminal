@@ -151,9 +151,6 @@ namespace Microsoft::Console::Render::Atlas
             LineRendition lineRendition = LineRendition::SingleWidth;
 
             til::linear_flat_set<AtlasGlyphEntry> glyphs;
-            // boxGlyphs gets an increased growth rate of 2^2 = 4x, because presumably fonts either contain very
-            // few or almost all of the box glyphs. This reduces the cost of _initializeFontFaceEntry quite a bit.
-            til::linear_flat_set<u16, 2, 2> boxGlyphs;
         };
 
         struct AtlasFontFaceEntry
@@ -181,6 +178,16 @@ namespace Microsoft::Console::Render::Atlas
                 i.fontFace = key.fontFace;
                 i.lineRendition = key.lineRendition;
                 return *this;
+            }
+        };
+
+        using BoxGlyph = std::pair<wil::com_ptr<IDWriteFontFace>, u16>;
+
+        struct BoxGlyphHasher
+        {
+            size_t operator()(const BackendD3D::BoxGlyph& key) const noexcept
+            {
+                return til::flat_set_hash_integer(std::bit_cast<uintptr_t>(key.first.get()) ^ key.second);
             }
         };
 
@@ -219,6 +226,7 @@ namespace Microsoft::Console::Render::Atlas
         ATLAS_ATTR_COLD void _drawTextOverlapSplit(const RenderingPayload& p, u16 y);
         ATLAS_ATTR_COLD static void _initializeFontFaceEntry(AtlasFontFaceEntryInner& fontFaceEntry);
         [[nodiscard]] ATLAS_ATTR_COLD bool _drawGlyph(const RenderingPayload& p, const AtlasFontFaceEntryInner& fontFaceEntry, AtlasGlyphEntry& glyphEntry);
+        bool _drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEntryInner& fontFaceEntry, AtlasGlyphEntry& glyphEntry, wchar_t ch);
         bool _drawSoftFontGlyph(const RenderingPayload& p, const AtlasFontFaceEntryInner& fontFaceEntry, AtlasGlyphEntry& glyphEntry);
         void _drawSoftFontGlyphInBitmap(const RenderingPayload& p, const AtlasGlyphEntry& glyphEntry) const;
         void _drawGlyphPrepareRetry(const RenderingPayload& p);
@@ -284,6 +292,7 @@ namespace Microsoft::Console::Render::Atlas
         u16x2 _targetSize{};
         u16x2 _viewportCellCount{};
         ShadingType _textShadingType = ShadingType::Default;
+        std::unordered_map<BoxGlyph, wchar_t, BoxGlyphHasher> _boxGlyphs;
 
         // An empty-box cursor spanning a wide glyph that has different
         // background colors on each side results in 6 lines being drawn.

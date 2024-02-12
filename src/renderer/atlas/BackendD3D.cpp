@@ -9,7 +9,9 @@
 #include <shader_ps.h>
 #include <shader_vs.h>
 
+#include "BoxGlyphs.h"
 #include "dwrite.h"
+#include "DWriteTextAnalysis.h"
 #include "../../types/inc/ColorFix.hpp"
 
 #if ATLAS_DEBUG_SHOW_DIRTY || ATLAS_DEBUG_COLORIZE_GLYPH_ATLAS
@@ -42,6 +44,8 @@ TIL_FAST_MATH_BEGIN
 
 using namespace Microsoft::Console::Render::Atlas;
 
+static constexpr D2D1_MATRIX_3X2_F identityTransform{ .m11 = 1, .m22 = 1 };
+
 template<>
 struct std::hash<u16>
 {
@@ -68,8 +72,6 @@ struct std::hash<BackendD3D::AtlasGlyphEntry>
 template<>
 struct std::hash<BackendD3D::AtlasFontFaceEntry>
 {
-    using T = BackendD3D::AtlasFontFaceEntry;
-
     size_t operator()(const BackendD3D::AtlasFontFaceKey& key) const noexcept
     {
         return til::flat_set_hash_integer(std::bit_cast<uintptr_t>(key.fontFace) | static_cast<u8>(key.lineRendition));
@@ -340,7 +342,11 @@ void BackendD3D::_updateFontDependents(const RenderingPayload& p)
     _fontChangedResetGlyphAtlas = true;
     _textShadingType = font.antialiasingMode == AntialiasingMode::ClearType ? ShadingType::TextClearType : ShadingType::TextGrayscale;
 
+    // _ligatureOverhangTriggerLeft/Right are essentially thresholds for a glyph's width at
+    // which point we consider it wider than allowed and "this looks like a coding ligature".
+    // See _drawTextOverlapSplit for more information about what this does.
     {
+        // No ligatures -> No thresholds.
         auto ligaturesDisabled = false;
         for (const auto& feature : font.fontFeatures)
         {
@@ -361,6 +367,63 @@ void BackendD3D::_updateFontDependents(const RenderingPayload& p)
             const auto halfCellWidth = font.cellSize.x / 2;
             _ligatureOverhangTriggerLeft = -halfCellWidth;
             _ligatureOverhangTriggerRight = font.advanceWidth + halfCellWidth;
+        }
+    }
+
+    // This figures out in advance which font-face/glyph-index pairs are box glyphs.
+    // That way we can translate them to our custom box glyph drawings.
+    {
+        _boxGlyphs.clear();
+
+        static constexpr u32 charCount = 0xa0;
+
+        wchar_t chars[charCount];
+        u16 glyphIndices[charCount];
+        TextAnalysisSource analysisSource{ p.userLocaleName.c_str(), &chars[0], charCount };
+
+        for (int i = 0; i < charCount; ++i)
+        {
+            chars[i] = 0x2500 + i;
+        }
+
+        for (u32 off = 0, mappedLength = 0; off < charCount; off += mappedLength)
+        {
+            f32 scale;
+            wil::com_ptr<IDWriteFont> mappedFont;
+            THROW_IF_FAILED(p.systemFontFallback->MapCharacters(
+                /* analysisSource     */ &analysisSource,
+                /* textPosition       */ off,
+                /* textLength         */ charCount - off,
+                /* baseFontCollection */ font.fontCollection.get(),
+                /* baseFamilyName     */ font.fontName.c_str(),
+                /* baseWeight         */ DWRITE_FONT_WEIGHT_NORMAL,
+                /* baseStyle          */ DWRITE_FONT_STYLE_NORMAL,
+                /* baseStretch        */ DWRITE_FONT_STRETCH_NORMAL,
+                /* mappedLength       */ &mappedLength,
+                /* mappedFont         */ mappedFont.addressof(),
+                /* scale              */ &scale));
+
+            if (!mappedFont)
+            {
+                continue;
+            }
+
+            wil::com_ptr<IDWriteFontFace> mappedFontFace;
+            THROW_IF_FAILED(mappedFont->CreateFontFace(mappedFontFace.addressof()));
+
+            BOOL isTextSimple = FALSE;
+            u32 complexityLength;
+            THROW_IF_FAILED(p.textAnalyzer->GetTextComplexity(&chars[off], mappedLength, mappedFontFace.get(), &isTextSimple, &complexityLength, &glyphIndices[0]));
+
+            if (!isTextSimple || complexityLength != mappedLength)
+            {
+                continue;
+            }
+
+            for (u32 i = 0; i < complexityLength; ++i)
+            {
+                _boxGlyphs.emplace(std::piecewise_construct, std::forward_as_tuple(mappedFontFace, glyphIndices[i]), std::forward_as_tuple(chars[i + off]));
+            }
         }
     }
 
@@ -809,9 +872,6 @@ void BackendD3D::_resizeGlyphAtlas(const RenderingPayload& p, const u16 u, const
         _d2dRenderTarget.try_query_to(_d2dRenderTarget4.addressof());
 
         _d2dRenderTarget->SetUnitMode(D2D1_UNIT_MODE_PIXELS);
-        // We don't really use D2D for anything except DWrite, but it
-        // can't hurt to ensure that everything it does is pixel aligned.
-        _d2dRenderTarget->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
         // Ensure that D2D uses the exact same gamma as our shader uses.
         _d2dRenderTarget->SetTextRenderingParams(_textRenderingParams.get());
 
@@ -1201,32 +1261,8 @@ void BackendD3D::_drawTextOverlapSplit(const RenderingPayload& p, u16 y)
     }
 }
 
-void BackendD3D::_initializeFontFaceEntry(AtlasFontFaceEntryInner& fontFaceEntry)
+void BackendD3D::_initializeFontFaceEntry(AtlasFontFaceEntryInner&)
 {
-    if (!fontFaceEntry.fontFace)
-    {
-        return;
-    }
-
-    ALLOW_UNINITIALIZED_BEGIN
-    std::array<u32, 0x100> codepoints;
-    std::array<u16, 0x100> indices;
-    ALLOW_UNINITIALIZED_END
-
-    for (u32 i = 0; i < codepoints.size(); ++i)
-    {
-        codepoints[i] = 0x2500 + i;
-    }
-
-    THROW_IF_FAILED(fontFaceEntry.fontFace->GetGlyphIndicesW(codepoints.data(), codepoints.size(), indices.data()));
-
-    for (u32 i = 0; i < indices.size(); ++i)
-    {
-        if (const auto idx = indices[i])
-        {
-            fontFaceEntry.boxGlyphs.insert(idx);
-        }
-    }
 }
 
 bool BackendD3D::_drawGlyph(const RenderingPayload& p, const AtlasFontFaceEntryInner& fontFaceEntry, AtlasGlyphEntry& glyphEntry)
@@ -1234,6 +1270,19 @@ bool BackendD3D::_drawGlyph(const RenderingPayload& p, const AtlasFontFaceEntryI
     if (!fontFaceEntry.fontFace)
     {
         return _drawSoftFontGlyph(p, fontFaceEntry, glyphEntry);
+    }
+
+    // Overhangs for box glyphs can produce unsightly effects, where the antialiased edges of horizontal
+    // and vertical lines overlap between neighboring glyphs and produce "boldened" intersections.
+    // It looks a little something like this:
+    //   ---+---+---
+    // This avoids the issue in most cases by simply clipping the glyph to the size of a single cell.
+    // The downside is that it fails to work well for custom line heights, etc.
+    bool isBoxGlyph = false;
+    if (const auto it = _boxGlyphs.find({ fontFaceEntry.fontFace, glyphEntry.glyphIndex }); it != _boxGlyphs.end())
+    {
+        isBoxGlyph = true;
+        return _drawBoxGlyph(p, fontFaceEntry, glyphEntry, it->second);
     }
 
     const DWRITE_GLYPH_RUN glyphRun{
@@ -1336,9 +1385,18 @@ bool BackendD3D::_drawGlyph(const RenderingPayload& p, const AtlasFontFaceEntryI
 
     const auto lineRendition = static_cast<LineRendition>(fontFaceEntry.lineRendition);
     const auto needsTransform = lineRendition != LineRendition::SingleWidth;
-
-    static constexpr D2D1_MATRIX_3X2_F identityTransform{ .m11 = 1, .m22 = 1 };
     D2D1_MATRIX_3X2_F transform = identityTransform;
+    //u16 boxGlyphIndex = 0;
+
+    if (isBoxGlyph)
+    {
+        //glyphRun.fontFace = fontFaceEntry.fontFace.get();
+        //glyphRun.glyphIndices = &boxGlyphIndex;
+
+        transform.m11 = 2.0f;
+        transform.m22 = lineRendition >= LineRendition::DoubleHeightTop ? 2.0f : 1.0f;
+        _d2dRenderTarget->SetTransform(&transform);
+    }
 
     if (needsTransform)
     {
@@ -1399,20 +1457,13 @@ bool BackendD3D::_drawGlyph(const RenderingPayload& p, const AtlasFontFaceEntryI
         }
     }
 
-    // Overhangs for box glyphs can produce unsightly effects, where the antialiased edges of horizontal
-    // and vertical lines overlap between neighboring glyphs and produce "boldened" intersections.
-    // It looks a little something like this:
-    //   ---+---+---
-    // This avoids the issue in most cases by simply clipping the glyph to the size of a single cell.
-    // The downside is that it fails to work well for custom line heights, etc.
-    const auto isBoxGlyph = fontFaceEntry.boxGlyphs.lookup(glyphEntry.glyphIndex) != nullptr;
     if (isBoxGlyph)
     {
         // NOTE: As mentioned above, the "origin" of a glyph's coordinate system is its baseline.
-        bounds.left = std::max(bounds.left, 0.0f);
-        bounds.top = std::max(bounds.top, static_cast<f32>(-p.s->font->baseline) * transform.m22);
-        bounds.right = std::min(bounds.right, static_cast<f32>(p.s->font->cellSize.x) * transform.m11);
-        bounds.bottom = std::min(bounds.bottom, static_cast<f32>(p.s->font->descender) * transform.m22);
+        bounds.left = 0.0f;
+        bounds.top = static_cast<f32>(-p.s->font->baseline) * transform.m22;
+        bounds.right = static_cast<f32>(p.s->font->cellSize.x) * transform.m11;
+        bounds.bottom = static_cast<f32>(p.s->font->descender) * transform.m22;
     }
 
     // The bounds may be empty if the glyph is whitespace.
@@ -1481,11 +1532,11 @@ bool BackendD3D::_drawGlyph(const RenderingPayload& p, const AtlasFontFaceEntryI
         }
     }
 
-    // Ligatures are drawn with strict cell-wise foreground color, while other text allows colors to overhang
-    // their cells. This makes sure that italics and such retain their color and don't look "cut off".
+    // This block determines whether we need to call _drawTextOverlapSplit for this glyph.
+    // See _drawTextOverlapSplit for more information about what this does.
     //
-    // The former condition makes sure to exclude diacritics and such from being considered a ligature,
-    // while the latter condition-pair makes sure to exclude regular BMP wide glyphs that overlap a little.
+    // _ligatureOverhangTriggerLeft/Right are essentially thresholds for a glyph's width at
+    // which point we consider it wider than allowed and "this looks like a coding ligature".
     const auto horizontalScale = lineRendition != LineRendition::SingleWidth ? 2 : 1;
     const auto triggerLeft = _ligatureOverhangTriggerLeft * horizontalScale;
     const auto triggerRight = _ligatureOverhangTriggerRight * horizontalScale;
@@ -1495,6 +1546,163 @@ bool BackendD3D::_drawGlyph(const RenderingPayload& p, const AtlasFontFaceEntryI
     glyphEntry.data.overlapSplit = overlapSplit;
     glyphEntry.data.offset.x = bl;
     glyphEntry.data.offset.y = bt;
+    glyphEntry.data.size.x = rect.w;
+    glyphEntry.data.size.y = rect.h;
+    glyphEntry.data.texcoord.x = rect.x;
+    glyphEntry.data.texcoord.y = rect.y;
+
+    if (lineRendition >= LineRendition::DoubleHeightTop)
+    {
+        _splitDoubleHeightGlyph(p, fontFaceEntry, glyphEntry);
+    }
+
+    return true;
+}
+
+bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEntryInner& fontFaceEntry, AtlasGlyphEntry& glyphEntry, wchar_t ch)
+{
+    const auto lineRendition = static_cast<LineRendition>(fontFaceEntry.lineRendition);
+    const int scaleShiftX = lineRendition >= LineRendition::DoubleWidth;
+    const int scaleShiftY = lineRendition >= LineRendition::DoubleHeightTop;
+
+    stbrp_rect rect{
+        .w = p.s->font->cellSize.x << scaleShiftX,
+        .h = p.s->font->cellSize.y << scaleShiftY,
+    };
+    if (!stbrp_pack_rects(&_rectPacker, &rect, 1))
+    {
+        _drawGlyphPrepareRetry(p);
+        return false;
+    }
+
+    _d2dBeginDrawing();
+
+    const D2D1_MATRIX_3X2_F transform{
+        .m11 = 1,
+        .m22 = 1,
+        .dx = static_cast<f32>(rect.x),
+        .dy = static_cast<f32>(rect.y),
+    };
+    const D2D1_RECT_F clipRect{
+        .right = static_cast<f32>(rect.w),
+        .bottom = static_cast<f32>(rect.h),
+    };
+    _d2dRenderTarget->SetTransform(&transform);
+    _d2dRenderTarget->PushAxisAlignedClip(&clipRect, D2D1_ANTIALIAS_MODE_ALIASED);
+    const auto restoreD2D = wil::scope_exit([&]() {
+        _d2dRenderTarget->PopAxisAlignedClip();
+        _d2dRenderTarget->SetTransform(&identityTransform);
+    });
+
+    const D2D1_STROKE_STYLE_PROPERTIES props{
+        .startCap = D2D1_CAP_STYLE_SQUARE,
+        .endCap = D2D1_CAP_STYLE_SQUARE,
+        .dashCap = D2D1_CAP_STYLE_SQUARE,
+        .lineJoin = D2D1_LINE_JOIN_MITER,
+        .miterLimit = 0,
+        .dashStyle = D2D1_DASH_STYLE_SOLID,
+        .dashOffset = 0,
+    };
+    wil::com_ptr<ID2D1StrokeStyle> style;
+    p.d2dFactory->CreateStrokeStyle(&props, nullptr, 0, style.addressof());
+
+    const auto& lines = BoxGlyphs::lines[ch - 0x2500];
+
+    for (size_t i = 0; i < 4 && lines[i].width; ++i)
+    {
+        const auto begX = BoxGlyphs::posToFloat(lines[i].begX);
+        const auto begY = BoxGlyphs::posToFloat(lines[i].begY);
+        const auto endX = BoxGlyphs::posToFloat(lines[i].endX);
+        const auto endY = BoxGlyphs::posToFloat(lines[i].endY);
+        const auto width = std::max(1.0f, roundf(clipRect.right * BoxGlyphs::widthToFloat(lines[i].width)));
+        const auto halfWidth = width * 0.5f;
+        const auto begXHW = BoxGlyphs::isLine(lines[i].begX) ? halfWidth : 0;
+        const auto begYHW = BoxGlyphs::isLine(lines[i].begY) ? halfWidth : 0;
+        const auto endXHW = BoxGlyphs::isLine(lines[i].endX) ? halfWidth : 0;
+        const auto endYHW = BoxGlyphs::isLine(lines[i].endY) ? halfWidth : 0;
+
+        const D2D1_POINT_2F beg{
+            roundf(clipRect.right * begX - begXHW) + begXHW,
+            roundf(clipRect.bottom * begY - begYHW) + begYHW,
+        };
+        const D2D1_POINT_2F end{
+            roundf(clipRect.right * endX - endXHW) + endXHW,
+            roundf(clipRect.bottom * endY - endYHW) + endYHW,
+        };
+
+        if (const auto mod = lines[i].flags & BoxGlyphs::Flags_LineMask)
+        {
+            switch (mod)
+            {
+            case BoxGlyphs::Flags_LineRect:
+            {
+                const D2D1_RECT_F r{ beg.x, beg.y, end.x, end.y };
+                _d2dRenderTarget->DrawRectangle(&r, _brush.get(), width, nullptr);
+                break;
+            }
+            case BoxGlyphs::Flags_LineRoundedRect:
+            {
+                const auto radius = width * 2;
+                const D2D1_ROUNDED_RECT r{ { beg.x, beg.y, end.x, end.y }, radius, radius };
+                _d2dRenderTarget->DrawRoundedRectangle(&r, _brush.get(), width, nullptr);
+                break;
+            }
+            default:
+                assert(false);
+                break;
+            }
+        }
+        else if (const auto shade = lines[i].flags & BoxGlyphs::Flags_ShadeMask)
+        {
+            static constexpr u32 _ = 0;
+            static constexpr u32 w = 0xffffffff;
+            static constexpr u32 size = 2;
+            // clang-format off
+            static constexpr u32 shades[3][size * size] = {
+                {
+                    w, _,
+                    _, _,
+                },
+                {
+                    w, _,
+                    _, w,
+                },
+                {
+                    w, w,
+                    w, _,
+                },
+            };
+            // clang-format on
+            
+            const auto idx = BoxGlyphs::Flags_ShadeToIndex(shade);
+            const auto src = &shades[idx][0];
+
+            static constexpr D2D1_SIZE_U bitmapSize{ size, size };
+            static constexpr D2D1_BITMAP_PROPERTIES1 bitmapProperties{
+                .pixelFormat = { DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED },
+                .dpiX = 96,
+                .dpiY = 96,
+            };
+            wil::com_ptr<ID2D1Bitmap1> bitmap;
+            THROW_IF_FAILED(_d2dRenderTarget->CreateBitmap(bitmapSize, src, sizeof(u32) * size, &bitmapProperties, bitmap.addressof()));
+
+            wil::com_ptr<ID2D1BitmapBrush> brush;
+            THROW_IF_FAILED(_d2dRenderTarget->CreateBitmapBrush(bitmap.get(), brush.addressof()));
+            brush->SetExtendModeX(D2D1_EXTEND_MODE_WRAP);
+            brush->SetExtendModeY(D2D1_EXTEND_MODE_WRAP);
+
+            _d2dRenderTarget->DrawLine(beg, end, brush.get(), width, nullptr);
+        }
+        else
+        {
+            _d2dRenderTarget->DrawLine(beg, end, _brush.get(), width, nullptr);
+        }
+    }
+
+    glyphEntry.data.shadingType = ShadingType::TextGrayscale;
+    glyphEntry.data.overlapSplit = false;
+    glyphEntry.data.offset.x = 0;
+    glyphEntry.data.offset.y = -p.s->font->baseline;
     glyphEntry.data.size.x = rect.w;
     glyphEntry.data.size.y = rect.h;
     glyphEntry.data.texcoord.x = rect.x;
@@ -1815,8 +2023,8 @@ void BackendD3D::_drawCursorBackground(const RenderingPayload& p)
         }
 
         const i16x2 position{
-            p.s->font->cellSize.x * x0,
-            p.s->font->cellSize.y * p.cursorRect.top,
+            static_cast<i16>(p.s->font->cellSize.x * x0),
+            static_cast<i16>(p.s->font->cellSize.y * p.cursorRect.top),
         };
         const u16x2 size{
             static_cast<u16>(p.s->font->cellSize.x * (x1 - x0)),
@@ -2135,12 +2343,12 @@ void BackendD3D::_drawSelection(const RenderingPayload& p)
                 _appendQuad() = {
                     .shadingType = ShadingType::Selection,
                     .position = {
-                        p.s->font->cellSize.x * row->selectionFrom,
-                        p.s->font->cellSize.y * y,
+                        static_cast<i16>(p.s->font->cellSize.x * row->selectionFrom),
+                        static_cast<i16>(p.s->font->cellSize.y * y),
                     },
                     .size = {
                         static_cast<u16>(p.s->font->cellSize.x * (row->selectionTo - row->selectionFrom)),
-                        p.s->font->cellSize.y,
+                        static_cast<u16>(p.s->font->cellSize.y),
                     },
                     .color = p.s->misc->selectionColor,
                 };

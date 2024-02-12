@@ -499,6 +499,7 @@ namespace Microsoft::Console::Render::Atlas
 
         //// Parameters which change seldom.
         GenerationalSettings s;
+        std::wstring userLocaleName;
 
         //// Parameters which change every frame.
         // This is the backing buffer for `rows`.
