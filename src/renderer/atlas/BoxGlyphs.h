@@ -111,243 +111,243 @@ namespace Microsoft::Console::Render::Atlas::BoxGlyphs
         Line{ heavy, q(1, 2), q(8, 16), q(1, 2), q(10, 16) },
         Line{ heavy, q(1, 2), q(12, 16), q(1, 2), q(14, 16) },
         // U+250c ┌
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+250d ┍
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+250e ┎
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+250f ┏
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2510 ┐
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2511 ┑
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2512 ┒
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2513 ┓
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2514 └
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2515 ┕
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2516 ┖
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2517 ┗
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // vertical
         Line{},
         Line{},
         // U+2518 ┘
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+2519 ┙
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+251a ┚
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+251b ┛
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+251c ├
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+251d ┝
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
         Line{ light, q(1, 2), q(0, 2), q(1, 2), q(2, 2) }, // vertical
         Line{},
         Line{},
         // U+251e ┞
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ light, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+251f ┟
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2520 ┠
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(0, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(0, 16), q(10, 16), q(10, 16) }, // vertical
         Line{},
         Line{},
         // U+2521 ┡
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ light, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2522 ┢
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2523 ┣
-        Line{ heavy, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(0, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(0, 16), q(10, 16), q(10, 16) }, // vertical
         Line{},
         Line{},
         // U+2524 ┤
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ heavy, q(0, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ heavy, q(0, 16), q(0, 16), q(10, 16), q(10, 16) }, // vertical
         Line{},
         Line{},
         // U+2525 ┥
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ heavy, q(0, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ heavy, q(0, 16), q(0, 16), q(10, 16), q(10, 16) }, // vertical
         Line{},
         Line{},
         // U+2526 ┦
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2527 ┧
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2528 ┨
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ heavy, q(0, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ heavy, q(0, 16), q(0, 16), q(10, 16), q(10, 16) }, // vertical
         Line{},
         Line{},
         // U+2529 ┩
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+252a ┪
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+252b ┫
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ heavy, q(0, 2), q(0, 2), q(1, 2), q(1, 2) }, // vertical
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ heavy, q(0, 16), q(0, 16), q(10, 16), q(10, 16) }, // vertical
         Line{},
         Line{},
         // U+252c ┬
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         Line{},
         // U+252d ┭
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+252e ┮
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+252f ┯
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         Line{},
         // U+2530 ┰
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         Line{},
         // U+2531 ┱
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2532 ┲
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2533 ┳
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         Line{},
         // U+2534 ┴
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+2535 ┵
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         // U+2536 ┶
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         // U+2537 ┷
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+2538 ┸
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+2539 ┹
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         // U+253a ┺
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         // U+253b ┻
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ heavy, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // up
         Line{},
         Line{},
         // U+253c ┼
@@ -356,29 +356,29 @@ namespace Microsoft::Console::Render::Atlas::BoxGlyphs
         Line{},
         Line{},
         // U+253d ┽
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
         Line{ light, q(1, 2), q(0, 2), q(1, 2), q(2, 2) }, // vertical
         Line{},
         // U+253e ┾
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
         Line{ light, q(1, 2), q(0, 2), q(1, 2), q(2, 2) }, // vertical
         Line{},
         // U+253f ┿
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
         Line{ light, q(1, 2), q(0, 2), q(1, 2), q(2, 2) }, // vertical
         Line{},
         Line{},
         // U+2540 ╀
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2541 ╁
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2542 ╂
         Line{ light, q(0, 2), q(1, 2), q(2, 2), q(1, 2) }, // horizontal
@@ -386,43 +386,43 @@ namespace Microsoft::Console::Render::Atlas::BoxGlyphs
         Line{},
         Line{},
         // U+2543 ╃
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         // U+2544 ╄
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         // U+2545 ╅
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         // U+2546 ╆
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         // U+2547 ╇
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2548 ╈
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // horizontal
-        Line{ light, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
-        Line{ heavy, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // horizontal
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // up
+        Line{ heavy, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // down
         Line{},
         // U+2549 ╉
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
         Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(2, 2) }, // vertical
         Line{},
         // U+254a ╊
-        Line{ light, q(0, 2), q(1, 2), q(1, 2), q(1, 2) }, // left
-        Line{ light, q(1, 2), q(1, 2), q(2, 2), q(1, 2) }, // right
+        Line{ light, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
+        Line{ light, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
         Line{ heavy, q(1, 2), q(0, 2), q(1, 2), q(2, 2) }, // vertical
         Line{},
         // U+254b ╋

@@ -1656,24 +1656,30 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
         {
             static constexpr u32 _ = 0;
             static constexpr u32 w = 0xffffffff;
-            static constexpr u32 size = 2;
+            static constexpr u32 size = 4;
             // clang-format off
             static constexpr u32 shades[3][size * size] = {
                 {
-                    w, _,
-                    _, _,
+                    w, _, _, _,
+                    _, w, _, _,
+                    _, _, w, _,
+                    _, _, _, w,
                 },
                 {
-                    w, _,
-                    _, w,
+                    w, _, w, _,
+                    _, w, _, w,
+                    w, _, w, _,
+                    _, w, _, w,
                 },
                 {
-                    w, w,
-                    w, _,
+                    _, w, w, w,
+                    w, _, w, w,
+                    w, w, _, w,
+                    w, w, w, _,
                 },
             };
             // clang-format on
-            
+
             const auto idx = BoxGlyphs::Flags_ShadeToIndex(shade);
             const auto src = &shades[idx][0];
 
