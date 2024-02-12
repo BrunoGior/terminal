@@ -1594,65 +1594,31 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
         _d2dRenderTarget->SetTransform(&identityTransform);
     });
 
-    const D2D1_STROKE_STYLE_PROPERTIES props{
-        .startCap = D2D1_CAP_STYLE_SQUARE,
-        .endCap = D2D1_CAP_STYLE_SQUARE,
-        .dashCap = D2D1_CAP_STYLE_SQUARE,
-        .lineJoin = D2D1_LINE_JOIN_MITER,
-        .miterLimit = 0,
-        .dashStyle = D2D1_DASH_STYLE_SOLID,
-        .dashOffset = 0,
-    };
-    wil::com_ptr<ID2D1StrokeStyle> style;
-    p.d2dFactory->CreateStrokeStyle(&props, nullptr, 0, style.addressof());
-
     const auto& lines = BoxGlyphs::lines[ch - 0x2500];
 
-    for (size_t i = 0; i < 4 && lines[i].width; ++i)
+    for (size_t i = 0; i < 4 && lines[i].value; ++i)
     {
-        const auto begX = BoxGlyphs::posToFloat(lines[i].begX);
-        const auto begY = BoxGlyphs::posToFloat(lines[i].begY);
-        const auto endX = BoxGlyphs::posToFloat(lines[i].endX);
-        const auto endY = BoxGlyphs::posToFloat(lines[i].endY);
-        const auto width = std::max(1.0f, roundf(clipRect.right * BoxGlyphs::widthToFloat(lines[i].width)));
-        const auto halfWidth = width * 0.5f;
-        const auto begXHW = BoxGlyphs::isLine(lines[i].begX) ? halfWidth : 0;
-        const auto begYHW = BoxGlyphs::isLine(lines[i].begY) ? halfWidth : 0;
-        const auto endXHW = BoxGlyphs::isLine(lines[i].endX) ? halfWidth : 0;
-        const auto endYHW = BoxGlyphs::isLine(lines[i].endY) ? halfWidth : 0;
+        auto shape = lines[i].shape;
 
-        const D2D1_POINT_2F beg{
-            roundf(clipRect.right * begX - begXHW) + begXHW,
-            roundf(clipRect.bottom * begY - begYHW) + begYHW,
-        };
-        const D2D1_POINT_2F end{
-            roundf(clipRect.right * endX - endXHW) + endXHW,
-            roundf(clipRect.bottom * endY - endYHW) + endYHW,
-        };
-
-        if (const auto mod = lines[i].flags & BoxGlyphs::Flags_LineMask)
+        i32 shadeIndex;
+        switch (shape)
         {
-            switch (mod)
-            {
-            case BoxGlyphs::Flags_LineRect:
-            {
-                const D2D1_RECT_F r{ beg.x, beg.y, end.x, end.y };
-                _d2dRenderTarget->DrawRectangle(&r, _brush.get(), width, nullptr);
-                break;
-            }
-            case BoxGlyphs::Flags_LineRoundedRect:
-            {
-                const auto radius = width * 2;
-                const D2D1_ROUNDED_RECT r{ { beg.x, beg.y, end.x, end.y }, radius, radius };
-                _d2dRenderTarget->DrawRoundedRectangle(&r, _brush.get(), width, nullptr);
-                break;
-            }
-            default:
-                assert(false);
-                break;
-            }
+        case BoxGlyphs::Shape_Filled75:
+            shadeIndex = 0;
+            break;
+        case BoxGlyphs::Shape_Filled50:
+            shadeIndex = 1;
+            break;
+        case BoxGlyphs::Shape_Filled25:
+            shadeIndex = 2;
+            break;
+        default:
+            shadeIndex = -1;
         }
-        else if (const auto shade = lines[i].flags & BoxGlyphs::Flags_ShadeMask)
+
+        wil::com_ptr<ID2D1BitmapBrush> bitmapBrush;
+        ID2D1Brush* brush = _brush.get();
+        if (shadeIndex != -1)
         {
             static constexpr u32 _ = 0;
             static constexpr u32 w = 0xffffffff;
@@ -1660,28 +1626,25 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
             // clang-format off
             static constexpr u32 shades[3][size * size] = {
                 {
-                    w, _, _, _,
-                    _, w, _, _,
-                    _, _, w, _,
-                    _, _, _, w,
-                },
-                {
-                    w, _, w, _,
-                    _, w, _, w,
-                    w, _, w, _,
-                    _, w, _, w,
-                },
-                {
                     _, w, w, w,
                     w, _, w, w,
                     w, w, _, w,
                     w, w, w, _,
                 },
+                {
+                    w, _, w, _,
+                    _, w, _, w,
+                    w, _, w, _,
+                    _, w, _, w,
+                },
+                {
+                    w, _, _, _,
+                    _, w, _, _,
+                    _, _, w, _,
+                    _, _, _, w,
+                },
             };
             // clang-format on
-
-            const auto idx = BoxGlyphs::Flags_ShadeToIndex(shade);
-            const auto src = &shades[idx][0];
 
             static constexpr D2D1_SIZE_U bitmapSize{ size, size };
             static constexpr D2D1_BITMAP_PROPERTIES1 bitmapProperties{
@@ -1690,18 +1653,105 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
                 .dpiY = 96,
             };
             wil::com_ptr<ID2D1Bitmap1> bitmap;
-            THROW_IF_FAILED(_d2dRenderTarget->CreateBitmap(bitmapSize, src, sizeof(u32) * size, &bitmapProperties, bitmap.addressof()));
+            THROW_IF_FAILED(_d2dRenderTarget->CreateBitmap(bitmapSize, &shades[shadeIndex][0], sizeof(u32) * size, &bitmapProperties, bitmap.addressof()));
 
-            wil::com_ptr<ID2D1BitmapBrush> brush;
-            THROW_IF_FAILED(_d2dRenderTarget->CreateBitmapBrush(bitmap.get(), brush.addressof()));
-            brush->SetExtendModeX(D2D1_EXTEND_MODE_WRAP);
-            brush->SetExtendModeY(D2D1_EXTEND_MODE_WRAP);
+            THROW_IF_FAILED(_d2dRenderTarget->CreateBitmapBrush(bitmap.get(), bitmapBrush.addressof()));
+            bitmapBrush->SetExtendModeX(D2D1_EXTEND_MODE_WRAP);
+            bitmapBrush->SetExtendModeY(D2D1_EXTEND_MODE_WRAP);
 
-            _d2dRenderTarget->DrawLine(beg, end, brush.get(), width, nullptr);
+            brush = bitmapBrush.get();
         }
-        else
+
+        const auto lightLineWidth = clipRect.right / 8.0f;
+        const auto heavyLineWidth = clipRect.right / 4.0f;
+
+        f32 lineWidth;
+        switch (shape)
         {
-            _d2dRenderTarget->DrawLine(beg, end, _brush.get(), width, nullptr);
+        case BoxGlyphs::Shape_HeavyLine:
+            lineWidth = heavyLineWidth;
+            break;
+        default:
+            lineWidth = lightLineWidth;
+            break;
+        }
+
+        auto begX = clipRect.right * BoxGlyphs::posToFloat(lines[i].begX);
+        auto begY = clipRect.bottom * BoxGlyphs::posToFloat(lines[i].begY);
+        auto endX = clipRect.right * BoxGlyphs::posToFloat(lines[i].endX);
+        auto endY = clipRect.bottom * BoxGlyphs::posToFloat(lines[i].endY);
+
+        if (shape == BoxGlyphs::Shape_LightLine || shape == BoxGlyphs::Shape_HeavyLine)
+        {
+            const auto hw = lineWidth / 2.0f;
+            if (begX == endX) // vertical
+            {
+                assert(begY < endY); // we expect begX/Y to be in the top-left and endX/Y to be in the bottom-right
+                begX = endX - hw;
+                endX = endX + hw;
+                shape = BoxGlyphs::Shape_Filled100;
+            }
+            else if (begY == endY) // horizontal
+            {
+                assert(begX < endX); // we expect begX/Y to be in the top-left and endX/Y to be in the bottom-right
+                begY = endY - hw;
+                endY = endY + hw;
+                shape = BoxGlyphs::Shape_Filled100;
+            }
+        }
+
+        switch (lines[i].offsetX)
+        {
+        case BoxGlyphs::Offset_Neg:
+            begX -= lineWidth;
+            endX -= lineWidth;
+            break;
+        case BoxGlyphs::Offset_Pos:
+            begX += lineWidth;
+            endX += lineWidth;
+            break;
+        default:
+            break;
+        }
+        switch (lines[i].offsetY)
+        {
+        case BoxGlyphs::Offset_Neg:
+            begY -= lineWidth;
+            endY -= lineWidth;
+            break;
+        case BoxGlyphs::Offset_Pos:
+            begY += lineWidth;
+            endY += lineWidth;
+            break;
+        default:
+            break;
+        }
+
+        lineWidth = roundf(lineWidth);
+        begX = roundf(begX);
+        begY = roundf(begY);
+        endX = roundf(endX);
+        endY = roundf(endY);
+
+        const D2D1_POINT_2F beg{ begX, begY };
+        const D2D1_POINT_2F end{ endX, endY };
+        const D2D1_ROUNDED_RECT roundedRect{ { begX, begY, endX, endY }, heavyLineWidth, heavyLineWidth };
+
+        switch (shape)
+        {
+        case BoxGlyphs::Shape_HollowRect:
+            _d2dRenderTarget->DrawRectangle(&roundedRect.rect, brush, lineWidth, nullptr);
+            break;
+        case BoxGlyphs::Shape_RoundedRect:
+            _d2dRenderTarget->DrawRoundedRectangle(&roundedRect, brush, lineWidth, nullptr);
+            break;
+        case BoxGlyphs::Shape_LightLine:
+        case BoxGlyphs::Shape_HeavyLine:
+            _d2dRenderTarget->DrawLine(beg, end, brush, lineWidth, nullptr);
+            break;
+        default:
+            _d2dRenderTarget->FillRectangle(&roundedRect.rect, brush);
+            break;
         }
     }
 

@@ -16,6 +16,7 @@
     <ClCompile Include="Backend.cpp" />
     <ClCompile Include="BackendD2D.cpp" />
     <ClCompile Include="BackendD3D.cpp" />
+    <ClCompile Include="BoxGlyphs.cpp" />
     <ClCompile Include="dwrite.cpp" />
     <ClCompile Include="DWriteTextAnalysis.cpp" />
     <ClCompile Include="pch.cpp">
