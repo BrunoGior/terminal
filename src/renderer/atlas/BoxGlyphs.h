@@ -22,15 +22,15 @@ namespace Microsoft::Console::Render::Atlas::BoxGlyphs
         u32 value = 0;
     };
     static_assert(sizeof(Line) == sizeof(u32));
-    
+
     enum Shape : u32
     {
         Shape_Filled100,
-        Shape_Filled75,
-        Shape_Filled50,
-        Shape_Filled25,
-        Shape_HollowRect,
-        Shape_RoundedRect,
+        Shape_Filled075,
+        Shape_Filled050,
+        Shape_Filled025,
+        Shape_EmptyRect,
+        Shape_RoundRect,
         Shape_LightLine,
         Shape_HeavyLine,
     };

@@ -70,7 +70,7 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{ Shape_HeavyLine, q(1, 2), q(12, 16), q(1, 2), q(14, 16) }, // vertical
     // U+250c ┌
     Line{ Shape_LightLine, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
-    Line{ Shape_LightLine, q(1, 2), q(0, 1), q(1, 2), q(1, 1) }, // vertical
+    Line{ Shape_LightLine, q(1, 2), q(8, 16), q(1, 2), q(16, 16) }, // down
     Line{},
     Line{},
     // U+250d ┍
@@ -255,7 +255,7 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{},
     // U+2531 ┱
     Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // left
-    Line{ Shape_LightLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+    Line{ Shape_LightLine, q(10, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_HeavyLine, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
     Line{},
     // U+2532 ┲
@@ -274,13 +274,13 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{},
     Line{},
     // U+2535 ┵
-    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
+    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(9, 16), q(1, 2) }, // left
     Line{ Shape_LightLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_LightLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{},
     // U+2536 ┶
     Line{ Shape_LightLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
-    Line{ Shape_HeavyLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+    Line{ Shape_HeavyLine, q(7, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_LightLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{},
     // U+2537 ┷
@@ -294,13 +294,13 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{},
     Line{},
     // U+2539 ┹
-    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
+    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // left
     Line{ Shape_LightLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_HeavyLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{},
     // U+253a ┺
     Line{ Shape_LightLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
-    Line{ Shape_HeavyLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+    Line{ Shape_HeavyLine, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_HeavyLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{},
     // U+253b ┻
@@ -344,23 +344,23 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{},
     Line{},
     // U+2543 ╃
-    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
+    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // left
     Line{ Shape_LightLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_HeavyLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{ Shape_LightLine, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
     // U+2544 ╄
     Line{ Shape_LightLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
-    Line{ Shape_HeavyLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+    Line{ Shape_HeavyLine, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_HeavyLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{ Shape_LightLine, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
     // U+2545 ╅
-    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
+    Line{ Shape_HeavyLine, q(0, 16), q(1, 2), q(10, 16), q(1, 2) }, // left
     Line{ Shape_LightLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_LightLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{ Shape_HeavyLine, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
     // U+2546 ╆
     Line{ Shape_LightLine, q(0, 16), q(1, 2), q(8, 16), q(1, 2) }, // left
-    Line{ Shape_HeavyLine, q(8, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
+    Line{ Shape_HeavyLine, q(6, 16), q(1, 2), q(16, 16), q(1, 2) }, // right
     Line{ Shape_LightLine, q(1, 2), q(0, 2), q(1, 2), q(1, 2) }, // up
     Line{ Shape_HeavyLine, q(1, 2), q(1, 2), q(1, 2), q(2, 2) }, // down
     // U+2547 ╇
@@ -419,18 +419,18 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{},
     Line{},
     // U+2552 ╒
-    Line{ Shape_LightLine, q(8, 16), q(8, 16), q(16, 16), q(8, 16), Offset_Nul, Offset_Neg },
-    Line{ Shape_LightLine, q(8, 16), q(8, 16), q(16, 16), q(8, 16), Offset_Nul, Offset_Pos },
+    Line{ Shape_LightLine, q(7, 16), q(8, 16), q(16, 16), q(8, 16), Offset_Nul, Offset_Neg },
+    Line{ Shape_EmptyRect, q(8, 16), q(8, 16), Pos_Max, Pos_Max, Offset_Nul, Offset_Pos },
     Line{},
     Line{},
     // U+2553 ╓
-    Line{ Shape_LightLine, q(6, 16), q(8, 16), q(16, 16), q(8, 16) },
-    Line{ Shape_LightLine, q(8, 16), q(0, 16), q(8, 16), q(16, 16), Offset_Neg, Offset_Nul },
-    Line{ Shape_LightLine, q(8, 16), q(0, 16), q(8, 16), q(16, 16), Offset_Pos, Offset_Nul },
+    Line{ Shape_LightLine, q(8, 16), q(8, 16), q(8, 16), q(16, 16), Offset_Neg, Offset_Nul },
+    Line{ Shape_EmptyRect, q(8, 16), q(8, 16), Pos_Max, Pos_Max, Offset_Pos, Offset_Nul },
+    Line{},
     Line{},
     // U+2554 ╔
-    Line{},
-    Line{},
+    Line{ Shape_EmptyRect, q(8, 16), q(8, 16), Pos_Max, Pos_Max, Offset_Neg, Offset_Neg },
+    Line{ Shape_EmptyRect, q(8, 16), q(8, 16), Pos_Max, Pos_Max, Offset_Pos, Offset_Pos },
     Line{},
     Line{},
     // U+2555 ╕
@@ -554,22 +554,22 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{},
     Line{},
     // U+256d ╭
-    Line{ Shape_RoundedRect, q(1, 2), q(1, 2), Pos_Max, Pos_Max },
+    Line{ Shape_RoundRect, q(1, 2), q(1, 2), Pos_Max, Pos_Max },
     Line{},
     Line{},
     Line{},
     // U+256e ╮
-    Line{ Shape_RoundedRect, Pos_Min, q(1, 2), q(1, 2), Pos_Max },
+    Line{ Shape_RoundRect, Pos_Min, q(1, 2), q(1, 2), Pos_Max },
     Line{},
     Line{},
     Line{},
     // U+256f ╯
-    Line{ Shape_RoundedRect, Pos_Min, Pos_Min, q(1, 2), q(1, 2) },
+    Line{ Shape_RoundRect, Pos_Min, Pos_Min, q(1, 2), q(1, 2) },
     Line{},
     Line{},
     Line{},
     // U+2570 ╰
-    Line{ Shape_RoundedRect, q(1, 2), Pos_Min, Pos_Max, q(1, 2) },
+    Line{ Shape_RoundRect, q(1, 2), Pos_Min, Pos_Max, q(1, 2) },
     Line{},
     Line{},
     Line{},
@@ -734,17 +734,17 @@ constinit Line BoxGlyphs::lines[0xa0][4] = {
     Line{},
     Line{},
     // U+2591 ░
-    Line{ Shape_Filled25, q(0, 1), q(0, 1), q(1, 1), q(1, 1) },
+    Line{ Shape_Filled025, q(0, 1), q(0, 1), q(1, 1), q(1, 1) },
     Line{},
     Line{},
     Line{},
     // U+2592 ▒
-    Line{ Shape_Filled50, q(0, 1), q(0, 1), q(1, 1), q(1, 1) },
+    Line{ Shape_Filled050, q(0, 1), q(0, 1), q(1, 1), q(1, 1) },
     Line{},
     Line{},
     Line{},
     // U+2593 ▓
-    Line{ Shape_Filled75, q(0, 1), q(0, 1), q(1, 1), q(1, 1) },
+    Line{ Shape_Filled075, q(0, 1), q(0, 1), q(1, 1), q(1, 1) },
     Line{},
     Line{},
     Line{},

@@ -1603,13 +1603,13 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
         i32 shadeIndex;
         switch (shape)
         {
-        case BoxGlyphs::Shape_Filled75:
+        case BoxGlyphs::Shape_Filled075:
             shadeIndex = 0;
             break;
-        case BoxGlyphs::Shape_Filled50:
+        case BoxGlyphs::Shape_Filled050:
             shadeIndex = 1;
             break;
-        case BoxGlyphs::Shape_Filled25:
+        case BoxGlyphs::Shape_Filled025:
             shadeIndex = 2;
             break;
         default:
@@ -1662,8 +1662,8 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
             brush = bitmapBrush.get();
         }
 
-        const auto lightLineWidth = clipRect.right / 8.0f;
-        const auto heavyLineWidth = clipRect.right / 4.0f;
+        const auto lightLineWidth = std::max(2.0f, clipRect.right / 4.0f);
+        const auto heavyLineWidth = std::max(1.0f, clipRect.right / 8.0f);
 
         f32 lineWidth;
         switch (shape)
@@ -1700,6 +1700,16 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
             }
         }
 
+        lineWidth = roundf(lineWidth);
+
+        const auto isUnfilledRect = shape == BoxGlyphs::Shape_EmptyRect || shape == BoxGlyphs::Shape_RoundRect;
+        const auto posOffset = isUnfilledRect ? lineWidth / 2.0f : 0;
+
+        begX = roundf(begX - posOffset) + posOffset;
+        begY = roundf(begY - posOffset) + posOffset;
+        endX = roundf(endX + posOffset) - posOffset;
+        endY = roundf(endY + posOffset) - posOffset;
+
         switch (lines[i].offsetX)
         {
         case BoxGlyphs::Offset_Neg:
@@ -1713,6 +1723,7 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
         default:
             break;
         }
+
         switch (lines[i].offsetY)
         {
         case BoxGlyphs::Offset_Neg:
@@ -1727,22 +1738,16 @@ bool BackendD3D::_drawBoxGlyph(const RenderingPayload& p, const AtlasFontFaceEnt
             break;
         }
 
-        lineWidth = roundf(lineWidth);
-        begX = roundf(begX);
-        begY = roundf(begY);
-        endX = roundf(endX);
-        endY = roundf(endY);
-
         const D2D1_POINT_2F beg{ begX, begY };
         const D2D1_POINT_2F end{ endX, endY };
         const D2D1_ROUNDED_RECT roundedRect{ { begX, begY, endX, endY }, heavyLineWidth, heavyLineWidth };
 
         switch (shape)
         {
-        case BoxGlyphs::Shape_HollowRect:
+        case BoxGlyphs::Shape_EmptyRect:
             _d2dRenderTarget->DrawRectangle(&roundedRect.rect, brush, lineWidth, nullptr);
             break;
-        case BoxGlyphs::Shape_RoundedRect:
+        case BoxGlyphs::Shape_RoundRect:
             _d2dRenderTarget->DrawRoundedRectangle(&roundedRect, brush, lineWidth, nullptr);
             break;
         case BoxGlyphs::Shape_LightLine:
